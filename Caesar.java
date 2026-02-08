@@ -20,9 +20,18 @@ class Caesar
     static String decrypt(String ciphertext, int key, 
                           boolean printPlaintext)
     {
-        /* To be completed */
-
-	return ""; // only here to satisfy the compiler
+       char[] chipherTextCharArr = ciphertext.toCharArray();
+       for(int i = 0; i < chipherTextCharArr.length; i++){
+        chipherTextCharArr[i] -= key;
+        if(chipherTextCharArr[i] < 'A'){
+            chipherTextCharArr[i] += 26;
+        }
+       }
+       String plainString = new String(chipherTextCharArr);
+       if(printPlaintext){
+        System.out.print(key + " " + plainString + "\n");
+       }
+	return plainString ; // only here to satisfy the compiler
     }// decrypt method
 
     /* This method will be used for testing purposes. You must complete it
@@ -48,8 +57,23 @@ class Caesar
                                "<ciphertext file name>");
             System.exit(1);
         }
-
+        Dict dictionary = new Dict(args[0]);
         String ciphertext = Utils.loadFromFile("ciphertext",args[1]);
+    
+        String possiblePlainText = "";
+        String bestMatchPlainText = "";
+        int numDictWords;
+        int mostDictWords = 0;
+        for(int i = 1; i <= 25; i++){
+          numDictWords = 0;
+          possiblePlainText = decrypt(ciphertext, i, false);
+          numDictWords = dictionary.countWords(possiblePlainText);
+          if(numDictWords > mostDictWords){
+            bestMatchPlainText = possiblePlainText;
+            mostDictWords = numDictWords;
+          }
+        }
+        System.out.println(bestMatchPlainText);
 
         /* To be completed */
 

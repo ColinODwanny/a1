@@ -70,9 +70,18 @@ class Dict
      */
     int countWords(String text)
     {
-        /* To be completed */
-
-        return 0; // only here to satisfy the compiler  
+        int dictWordOccurrences = 0;
+        for(int i = 0; i < words.length; i++){
+            int lastIndex = 0; 
+            while(lastIndex != -1){
+                lastIndex = text.indexOf(words[i], lastIndex);
+                if(lastIndex != -1){
+                    dictWordOccurrences++;
+                    lastIndex += words[i].length();
+                }
+            }
+        }
+        return dictWordOccurrences; // only here to satisfy the compiler  
     }// countWords method
 
     /* This method will only be used for testing purposes 
@@ -80,7 +89,7 @@ class Dict
      */
     public static void main(String[] args)
     {   
-        Dict d = new Dict(args[0]); 
+        Dict d = new Dict(args[0]);
         System.out.println(d.numWords + " " + d.maxLength);
         for(int index=0; index<10; index++) {
             System.out.print(d.words[index] + " ");

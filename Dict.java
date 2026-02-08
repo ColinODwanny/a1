@@ -89,14 +89,12 @@ class Dict
      */
     public static void main(String[] args)
     {   
-        Dict d = new Dict("DT-keyspace.txt"); //CHANGE ARGUMENT TO args[0]
+        Dict d = new Dict(args[0]);
         System.out.println(d.numWords + " " + d.maxLength);
         for(int index=0; index<10; index++) {
             System.out.print(d.words[index] + " ");
         }
         System.out.println(d.words[d.numWords-1]);
-        int wordCount = d.countWords("AFTERSHOCK AFTERSHOCK BLACKHORSE BLACKSMITH");//DELETE LATER
-        System.out.println(wordCount); //DELETE LATER
     }// main method
 
 }// Dict class

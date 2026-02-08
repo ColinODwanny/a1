@@ -5,6 +5,8 @@
    Student #3's full name: ______
 *****************************************************/
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 class DT
@@ -48,13 +50,29 @@ class DT
             sb.append("X");
         }
     }
+
     String fullyPreppedString = sb.toString();
+    char[][] cipherGrid = new char[fullyPreppedString.length()/10][10];
+    int charIndexNum = 0;
+    for(int i = 0; i < cipherGrid.length; i++){
+        for(int j = 0; j < cipherGrid[0].length; j++){
+            cipherGrid[i][j] = fullyPreppedString.charAt(charIndexNum);
+            charIndexNum++;
+        }
+    }
 
     char[] keyCharArr = key.toCharArray();
     Arrays.sort(keyCharArr);
+    int currColumn;
+    sb.setLength(0);
+    for(int i = 0; i < key.length(); i++){
+        currColumn = key.indexOf(keyCharArr[i]);
+        for(int j = 0; j < cipherGrid.length; j++){
+            sb.append(cipherGrid[j][currColumn]);
+        }
+    }
 
-
-	return ""; // only here to satisfy the compiler
+	return sb.toString(); // only here to satisfy the compiler
     }// transpose method
 
     /* This method implements a single transposition step in the decryption
@@ -82,9 +100,30 @@ class DT
     static String encrypt(String plaintextFile, 
 			  String key1File, String key2File)
     {
-	/* To be completed */
+        File plainTextFileFile = new File(plaintextFile);
+        File key1FileFile = new File(key1File);
+        File key2FileFile = new File(key2File);
+        try (Scanner plainTextReader = new Scanner(plainTextFileFile);
+             Scanner key1Reader      = new Scanner(key1FileFile);
+             Scanner key2Reader      = new Scanner(key2FileFile)) {
 
-	return ""; // only here to satisfy the compiler	
+                String plainTextString = plainTextReader.nextLine();
+                String key1String      = key1Reader.nextLine();
+                String key2String      = key2Reader.nextLine();
+
+                String transposition1Result = transpose(plainTextString, key1String);
+                String transposition2Result = transpose(transposition1Result, key2String);
+
+                return transposition2Result;
+
+        } catch (FileNotFoundException e){
+            System.out.println("One of the files entered was not able to be found!");
+            System.exit(1);
+            return "one of the files entered was not able to be found!";
+        }
+        
+
+	 // only here to satisfy the compiler	
     }// encrypt method
 
     /* This method implements the complete decryption algorithm corresponding 
@@ -107,7 +146,6 @@ class DT
      */
     public static void main(String[] args)
     {	
-        transpose("ASDFGHJKLO", "JIHGFEDCBA");
 	if (args.length != 4)
 	{
 	    System.out.println("This program should be invoked with the " +

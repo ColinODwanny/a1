@@ -52,9 +52,13 @@ class Dict
     */
     boolean contains(String word)
     {
-        /* To be completed */
-
-        return true; // only here to satisfy the compiler
+        boolean isWordInDictionary = false;
+        for(int i = 0; i < words.length; i++){
+            if(words[i].equals(word)){
+                isWordInDictionary = true;
+            }
+        }
+        return isWordInDictionary; // only here to satisfy the compiler
     }// contains method
     
     /* This method returns the number of occurrences of dictionary words  

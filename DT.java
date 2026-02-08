@@ -17,9 +17,20 @@ class DT
      */
     static String prepare(String plaintext)
     {
-	/* To be completed */
+	String phrasePeriodsReplaced = plaintext.replace(".", "XX");
+    char[] phraseCharArr = phrasePeriodsReplaced.toCharArray();
+    ArrayList<Character> phraseCharsDeleted = new ArrayList<Character>();
+    for(int i = 0; i < phraseCharArr.length; i++){
+        if(phraseCharArr[i] >= 'A' && phraseCharArr[i] <= 'Z'){
+            phraseCharsDeleted.add(phraseCharArr[i]);
+        }
+    }
+    StringBuilder sb = new StringBuilder();
+    for (char myChar : phraseCharsDeleted) {
+        sb.append(myChar);
+    }
 
-	return ""; // only here to satisfy the compiler
+	return  sb.toString(); // only here to satisfy the compiler
     }// prepare method
 
     /* This method implements a single transposition step in the encryption
@@ -28,7 +39,20 @@ class DT
     */
     static String transpose(String text, String key)
     {
-	/* To be completed */
+    String partiallyPreppedString = prepare(text);
+    int numXsToBeAdded = 10 - partiallyPreppedString.length() % 10;
+    StringBuilder sb = new StringBuilder();
+    sb.append(partiallyPreppedString);
+    if(numXsToBeAdded % 10 != 0){
+        for(int i = 0; i < numXsToBeAdded; i++){
+            sb.append("X");
+        }
+    }
+    String fullyPreppedString = sb.toString();
+
+    char[] keyCharArr = key.toCharArray();
+    Arrays.sort(keyCharArr);
+
 
 	return ""; // only here to satisfy the compiler
     }// transpose method
@@ -83,6 +107,7 @@ class DT
      */
     public static void main(String[] args)
     {	
+        transpose("ASDFGHJKLO", "JIHGFEDCBA");
 	if (args.length != 4)
 	{
 	    System.out.println("This program should be invoked with the " +

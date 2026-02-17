@@ -186,6 +186,12 @@ class DT
                     currIndex--;
                 }
 
+                currIndex = bestString.length() - 2;
+                while(bestString.charAt(currIndex) == '.'){
+                    bestString = bestString.substring(0, bestString.length() - 1);
+                    currIndex--;
+                }
+
 
             } catch (FileNotFoundException e){
                 System.out.println("One of the files entered was not able to be found!");

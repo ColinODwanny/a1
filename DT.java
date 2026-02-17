@@ -81,9 +81,27 @@ class DT
     */
     static String reverseTranspose(String text, String key)
     {
-	/* To be completed */
+        char[] keyCharArr = key.toCharArray();
+        Arrays.sort(keyCharArr);
+        int currColumn;
+        int charIndexNum = 0;
+        char[][] cipherGrid = new char[text.length()/10][10];
+        for(int i = 0; i < key.length(); i++){
+            currColumn = key.indexOf(keyCharArr[i]);
+            for(int j = 0; j < cipherGrid.length; j++){
+                cipherGrid[j][currColumn] = text.charAt(charIndexNum);
+                charIndexNum++;
+            }
+        }
 
-	return ""; // only here to satisfy the compiler
+        
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < cipherGrid.length; i++){
+            for(int j = 0; j < cipherGrid[0].length; j++){
+                sb.append(cipherGrid[i][j]);
+            }
+        }
+	return sb.toString(); // only here to satisfy the compiler
     }// reverseTranspose method
 
     /* This method implements the complete encryption algorithm described
@@ -137,9 +155,46 @@ class DT
     static String decrypt(String ciphertextFile, 
 			  String dictFile, String keyspaceFile)
     {
-	/* To be completed */
+        String bestString = "";
+        File cipherTextFileFile = new File(ciphertextFile);
+        File keyspaceFileFile = new File(keyspaceFile);
+        try(Scanner cipherTextReader = new Scanner(cipherTextFileFile);
+            Scanner keyspaceReader   = new Scanner(keyspaceFileFile);) {
 
-	return ""; // only here to satisfy the compiler
+                ArrayList<String> allKeys = new ArrayList<String>();
+                while(keyspaceReader.hasNext()){
+                    allKeys.add(keyspaceReader.nextLine().trim());
+                }
+                String cipherText = cipherTextReader.nextLine();
+                Dict dictionary = new Dict(dictFile);
+                int mostDictWords = 0; 
+                String result = "";
+                for(int i = 0; i < allKeys.size(); i++){
+                    for(int j = 0; j < allKeys.size(); j++){
+                        result = reverseTranspose(reverseTranspose(cipherText, allKeys.get(i)), allKeys.get(j));
+                        if(dictionary.countWords(result) > mostDictWords){
+                            bestString = result;
+                            mostDictWords = dictionary.countWords(result);
+                        }
+                    }
+                }
+
+                bestString = bestString.replace("XX", ".");
+                int currIndex = bestString.length() - 1; 
+                while(bestString.charAt(currIndex) == 'X'){
+                    bestString = bestString.substring(0, bestString.length() - 1);
+                    currIndex--;
+                }
+
+
+            } catch (FileNotFoundException e){
+                System.out.println("One of the files entered was not able to be found!");
+                System.exit(1);
+                return "one of the files entered was not able to be found!";
+            }
+
+
+	return bestString; // only here to satisfy the compiler
     }// decrypt method
 
     /* This method will be used for testing purposes. You may NOT modify it.
